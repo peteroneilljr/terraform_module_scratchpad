@@ -52,21 +52,25 @@
 #################
 
 resource "aws_db_instance" "rds" {
-  allocated_storage    = 20
-  engine               = var.db_engine
+  allocated_storage   = 20
+  engine              = var.db_engine
   publicly_accessible = var.publicly_accessible
-  engine_version       = var.db_engine_version
-  identifier = var.db_identifier
-  instance_class       = var.db_instance_class
+  engine_version      = var.db_engine_version
+  identifier          = var.db_identifier
+  instance_class      = var.db_instance_class
   # name                 = var.db_identifier
-  skip_final_snapshot = var.db_skip_final
+  skip_final_snapshot         = var.db_skip_final
   allow_major_version_upgrade = var.db_auto_upgrade
-  auto_minor_version_upgrade = var.db_auto_upgrade
-  username             = var.admin_username
-  password             = var.admin_password
-  db_subnet_group_name       = aws_db_subnet_group.rds.name
-  vpc_security_group_ids = [aws_security_group.rds.id]
-  tags                       = var.default_tags
+  auto_minor_version_upgrade  = var.db_auto_upgrade
+  username                    = var.admin_username
+  password                    = var.admin_password
+  db_subnet_group_name        = aws_db_subnet_group.rds.name
+  vpc_security_group_ids      = [aws_security_group.rds.id]
+  tags                        = var.default_tags
+
+  lifecycle {
+    ignore_changes = [engine_version]
+  }
 }
 
 #################

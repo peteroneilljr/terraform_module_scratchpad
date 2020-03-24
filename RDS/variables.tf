@@ -50,24 +50,24 @@ resource "random_password" "aurora" {
 
 
 locals {
-#   sdm_add_aurora_postgres    = <<SDMCLI
-# SDM_ADMIN_TOKEN="${var.sdm_admin_token}"; \
-# /usr/local/bin/sdm admin datasources delete ${var.db_identifier}; \
-# /usr/local/bin/sdm admin datasources add aurora-postgres \
-# --database ${var.db_identifier} \
-# --hostname ${aws_rds_cluster.aurora.endpoint} \
-# --password ${local.password} \
-# --port ${var.db_port} \
-# --username ${var.admin_username} \
-# --tags 'creator=peter,managed_by=terraform' \
-# ${var.db_identifier} && \
-# echo "added 1 datasource ${var.db_identifier}" && \
-# /usr/local/bin/sdm admin roles grant ${var.db_identifier} AWS
-# SDMCLI
-#   sdm_remove_aurora_postgres = <<SDMCLI
-# SDM_ADMIN_TOKEN="${var.sdm_admin_token}"; \
-# /usr/local/bin/sdm admin datasources delete ${var.db_identifier}
-# SDMCLI
+  #   sdm_add_aurora_postgres    = <<SDMCLI
+  # SDM_ADMIN_TOKEN="${var.sdm_admin_token}"; \
+  # /usr/local/bin/sdm admin datasources delete ${var.db_identifier}; \
+  # /usr/local/bin/sdm admin datasources add aurora-postgres \
+  # --database ${var.db_identifier} \
+  # --hostname ${aws_rds_cluster.aurora.endpoint} \
+  # --password ${local.password} \
+  # --port ${var.db_port} \
+  # --username ${var.admin_username} \
+  # --tags 'creator=peter,managed_by=terraform' \
+  # ${var.db_identifier} && \
+  # echo "added 1 datasource ${var.db_identifier}" && \
+  # /usr/local/bin/sdm admin roles grant ${var.db_identifier} AWS
+  # SDMCLI
+  #   sdm_remove_aurora_postgres = <<SDMCLI
+  # SDM_ADMIN_TOKEN="${var.sdm_admin_token}"; \
+  # /usr/local/bin/sdm admin datasources delete ${var.db_identifier}
+  # SDMCLI
   password = var.admin_password != "" ? var.admin_password : random_password.aurora.result
 }
 

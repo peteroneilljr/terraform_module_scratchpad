@@ -2,13 +2,12 @@
 
 **sample**
 ~~~
-module "aurora" {
-  source              = "./modules/aurora"
+module "oracle12" {
+  source              = "./modules/RDS"
   vpc_id              = aws_vpc.peter_vpc.id
   subnet_ids          = aws_subnet.peter_public_subnet.*.id
-  db_engine           = "aurora-postgresql"
-  db_engine_mode      = "serverless"
-  db_engine_version   = "10.7"
+  db_engine           = "Oracle-ee"
+  db_engine_version   = "12.2"
 
   # optionals
   publicly_accessible = true
@@ -16,18 +15,17 @@ module "aurora" {
   admin_password      = var.admin_password
   db_count            = 1
   db_auto_upgrade     = false
-  db_identifier       = "auroradb"
-  db_instance_class   = "db.r5.large"
+  db_identifier       = "oracle12"
+  db_instance_class   = "db.m4.large"
   db_skip_final       = true
-  db_port             = 5432
-  db_backtrack        = 0
+  db_port             = 1521
   default_tags        = var.default_tags
 
-  sdm_admin_token     = var.sdm_admin_full
+  # sdm_admin_token     = var.sdm_admin_full
 }
 
-output "aurora_endpoint" {
-  value = module.aurora.endpoint
+output "oracle12_endpoint" {
+  value = module.oracle12.endpoint
 }
 
 module "aurora" {

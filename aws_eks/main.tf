@@ -15,7 +15,8 @@ resource "aws_subnet" "eks" {
   count = length(data.aws_availability_zones.available.names)
 
   availability_zone = data.aws_availability_zones.available.names[count.index]
-  cidr_block        = var.eks_cidr_block
+  # cidr_block        = var.eks_cidr_block
+  cidr_block        = "10.17.${count.index + 50}.0/24"
   vpc_id            = var.vpc_id
 
   tags = merge(map(
@@ -99,7 +100,6 @@ resource "aws_security_group" "eks" {
     Name = "${var.eks_cluster_name}-sg"
   }, var.default_tags)
 }
-
 
 resource "aws_eks_cluster" "eks" {
   name     = var.eks_cluster_name

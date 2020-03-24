@@ -12,4 +12,12 @@ module "eks" {
 
   default_tags = var.default_tags
 }
+
+output "eks_context" {
+  value = module.eks.eks_kubeconfig
+}
+
+output "eks_auth" {
+  value = module.eks.eks_config_map_aws_auth
+}
 ~~~
