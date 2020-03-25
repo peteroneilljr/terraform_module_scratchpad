@@ -15,8 +15,8 @@ resource "aws_subnet" "eks" {
   count = length(data.aws_availability_zones.available.names)
 
   availability_zone = data.aws_availability_zones.available.names[count.index]
-  # cidr_block        = var.eks_cidr_block
-  cidr_block        = "10.17.${count.index + 50}.0/24"
+  cidr_block        = cidrsubnet(var.vpc_cidr, 8, "${count.index + var.eks_cidr_block}")
+  # cidr_block        = "10.17.${count.index + 50}.0/24"
   vpc_id            = var.vpc_id
 
   tags = merge(map(
@@ -54,7 +54,7 @@ resource "aws_route_table_association" "eks" {
 #
 
 resource "aws_iam_role" "eks-cluster" {
-  name = "${var.eks_cluster_name}-role"
+  name = "${var.eks_cluster_name}-cluster-role"
 
   assume_role_policy = <<POLICY
 {
@@ -127,7 +127,7 @@ resource "aws_eks_cluster" "eks" {
 #
 
 resource "aws_iam_role" "eks-node" {
-  name = "terraform-eks-eks-node"
+  name = "${var.eks_cluster_name}-node-role"
 
   assume_role_policy = <<POLICY
 {
@@ -162,9 +162,9 @@ resource "aws_iam_role_policy_attachment" "eks-node-AmazonEC2ContainerRegistryRe
   role       = aws_iam_role.eks-node.name
 }
 
-resource "aws_eks_node_group" "demo" {
+resource "aws_eks_node_group" "eks" {
   cluster_name    = aws_eks_cluster.eks.name
-  node_group_name = "demo"
+  node_group_name = var.eks_cluster_name
   node_role_arn   = aws_iam_role.eks-node.arn
   subnet_ids      = aws_subnet.eks[*].id
 

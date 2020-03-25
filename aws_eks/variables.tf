@@ -7,6 +7,7 @@
   variable "subnets" {}
   variable "vpc_id" {}
   variable "vpc_igw" {}
+  variable "vpc_cidr" {}
   variable "eks_cidr_block" {}
   variable "default_tags" {}
   variable "region" {
