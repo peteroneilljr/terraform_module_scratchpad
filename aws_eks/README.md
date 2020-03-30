@@ -8,7 +8,7 @@ module "eks" {
   subnets          = aws_subnet.peter_private_subnet.*.id
   vpc_id           = aws_vpc.peter_vpc.id
   vpc_igw          = aws_internet_gateway.peter_vpc_igw.id
-  vpc_cidr         = aws_vpc.peter_vpc.cidr_block
+  vpc_cidr         = aws_vpc.peter_vpc.cidr_block # expects a /16
   eks_cidr_block   = "50" # Turns into 10.17.50.0/24
 
   default_tags = var.default_tags

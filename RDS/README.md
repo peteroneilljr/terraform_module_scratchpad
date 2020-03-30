@@ -55,7 +55,7 @@ output "aurora_endpoint" {
 }
 
 
-module "RDS" {
+module "oracle11" {
   source              = "./modules/RDS"
   vpc_id              = aws_vpc.peter_vpc.id
   subnet_ids          = aws_subnet.peter_public_subnet.*.id
@@ -68,7 +68,7 @@ module "RDS" {
   admin_password      = var.admin_password
   db_count            = 1
   db_auto_upgrade     = false
-  db_identifier       = "oracle"
+  db_identifier       = "oracle11"
   db_instance_class   = "db.m4.large"
   db_skip_final       = true
   db_port             = 1521
@@ -77,8 +77,8 @@ module "RDS" {
   # sdm_admin_token     = var.sdm_admin_full
 }
 
-output "RDS_endpoint" {
-  value = module.RDS.endpoint
+output "oracle11_endpoint" {
+  value = module.oracle11.endpoint
 }
 
 ~~~
