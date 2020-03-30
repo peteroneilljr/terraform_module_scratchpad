@@ -11,21 +11,28 @@ This that might be cool to have
 - ~~create before destroy?~~
 - egress port
 - egress SG
-- high-availability
+- gateway count
 - store token in parameter store 
+  encrypt token
+- conditional create
 
 ~~~
 module "sdm" {
   source              = "./modules/aws_sdm_node"
 
-  vpc_id              = aws_vpc.peter_vpc.id
+  sdm_gateway_name = aws_support
+  deploy_vpc_id              = aws_vpc.peter_vpc.id
   gateway_listen_port = 5000
 
-  gateway_subnets = []
-  relay_subnets = []
+  deploy_subnet_id = aws_subnet.peter_public_subnet[0].id
   
   ssh_access = true
-  cloudwatch_metrics = false
+  ssh_key = aws_key_pair.sdm_key.key_name
+  ssh_source = "0.0.0.0/0"
+
+  # cloudwatch_metrics = false
+
+  tags = var.default_tags
 
 }
 ~~~
