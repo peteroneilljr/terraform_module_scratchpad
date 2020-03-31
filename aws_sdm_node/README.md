@@ -1,12 +1,12 @@
 # Create strongDM Gateawys and Relays
 
 This that might be cool to have
-- bool for ssh access
-  - Creates key only when needed
-- specify placement by subnet
-- lifecycle ignore ami updating 
+- ~~bool for ssh access~~
+- ~~specify placement by subnet~~
+- ~~lifecycle ignore ami updating~~
 - bool for cloudwatch alarms
 - bool for IP or DNS
+- only use EIP for gateways
 - detailed monitoring
 - ~~create before destroy?~~
 - egress port
@@ -15,6 +15,7 @@ This that might be cool to have
 - store token in parameter store 
   encrypt token
 - conditional create
+- dev mode, smaller instance size
 
 ~~~
 module "sdm" {
