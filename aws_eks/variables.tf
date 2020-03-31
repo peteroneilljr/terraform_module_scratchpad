@@ -2,17 +2,17 @@
 # Variables
 #################
 
-  variable "eks_cluster_name" {}
-  variable "cluster_version" {}
-  variable "subnets" {}
-  variable "vpc_id" {}
-  variable "vpc_igw" {}
-  variable "vpc_cidr" {}
-  variable "eks_cidr_block" {}
-  variable "default_tags" {}
-  variable "region" {
-    default = "us-west-2"
-  }
+variable "eks_cluster_name" {}
+variable "cluster_version" {}
+variable "subnets" {}
+variable "vpc_id" {}
+variable "vpc_igw" {}
+variable "vpc_cidr" {}
+variable "eks_cidr_block" {}
+variable "default_tags" {}
+variable "region" {
+  default = "us-west-2"
+}
 
 
 

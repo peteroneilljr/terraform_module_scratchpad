@@ -70,6 +70,6 @@ SDMCLI
 SDM_ADMIN_TOKEN="${var.sdm_admin_token}"; \
 /usr/local/bin/sdm admin datasources delete ${var.db_identifier}
 SDMCLI
-  password = var.admin_password != "" ? var.admin_password : random_password.aurora.result
+  password                   = var.admin_password != "" ? var.admin_password : random_password.aurora.result
 }
 

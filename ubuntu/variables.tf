@@ -1,6 +1,6 @@
 variable "server_name" {}
-variable "instance_type" {} 
-variable "monitoring" {}    
+variable "instance_type" {}
+variable "monitoring" {}
 variable "subnet_id" {}
 variable "vpc_id" {}
 variable "key_name" {}
@@ -14,7 +14,7 @@ locals {
     "xenial" = "ubuntu/images/hvm-ssd/ubuntu-xenial*",
     "bionic" = "ubuntu/images/hvm-ssd/ubuntu-bionic*"
   }
-  ubuntu_search = [for version, filter in local.ubuntu_filters: filter if version == var.ubuntu_release][0]
+  ubuntu_search         = [for version, filter in local.ubuntu_filters : filter if version == var.ubuntu_release][0]
   ubuntu_account_number = "099720109477"
 }
 #################

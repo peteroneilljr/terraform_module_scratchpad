@@ -1,25 +1,25 @@
 variable "subnet_id" {
-  
+
 }
 variable "key_name" {
-  
+
 }
 variable "windows_year" {
-  
+
 }
 
 variable "user_data" {
   default = ""
-  
+
 }
 variable "server_name" {
-  
+
 }
 variable "vpc_id" {
-  
+
 }
 variable "default_tags" {
-  
+
 }
 variable "monitoring" {
   default = true
@@ -34,7 +34,7 @@ variable "associate_public_ip_address" {
 # Data
 #################
 data "aws_ami" "windows_server" {
-  owners = [ "amazon" ]
+  owners = ["amazon"]
 
   filter {
     name   = "name"
@@ -52,8 +52,8 @@ locals {
     "2016" = "Windows_Server-2016-English*",
     "2019" = "Windows_Server-2019-English*"
   }
-  windows_search = [for i, z in local.windows_filters: z if i == var.windows_year][0]
-  user_data = <<USERDATA
+  windows_search = [for i, z in local.windows_filters : z if i == var.windows_year][0]
+  user_data      = <<USERDATA
 <powershell>
 # Allow authentication method to be negotiated between server and client
 Write-Output "Allow authentication method to be negotiated between server and client"

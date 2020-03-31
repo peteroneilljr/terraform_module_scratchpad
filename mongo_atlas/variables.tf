@@ -1,5 +1,5 @@
 variable "sdm_gateway_ip" {
-  
+
 }
 variable "mongo_name" {
   default = "mongo"

@@ -17,7 +17,7 @@ resource "aws_subnet" "eks" {
   availability_zone = data.aws_availability_zones.available.names[count.index]
   cidr_block        = cidrsubnet(var.vpc_cidr, 8, "${count.index + var.eks_cidr_block}")
   # cidr_block        = "10.17.${count.index + 50}.0/24"
-  vpc_id            = var.vpc_id
+  vpc_id = var.vpc_id
 
   tags = merge(map(
     "Name", "${var.eks_cluster_name}",
@@ -70,7 +70,7 @@ resource "aws_iam_role" "eks-cluster" {
   ]
 }
 POLICY
-  tags = var.default_tags
+  tags               = var.default_tags
 
 }
 
@@ -143,7 +143,7 @@ resource "aws_iam_role" "eks-node" {
   ]
 }
 POLICY
-  tags = var.default_tags
+  tags               = var.default_tags
 
 }
 

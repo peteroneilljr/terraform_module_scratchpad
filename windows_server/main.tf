@@ -9,7 +9,7 @@ resource "aws_instance" "windows_server" {
   ami                         = data.aws_ami.windows_server.image_id
   user_data                   = local.user_data
   vpc_security_group_ids      = [aws_security_group.windows_server.id]
-  tags = merge( { "Name" = "${var.server_name}" }, var.default_tags, )
+  tags                        = merge({ "Name" = "${var.server_name}" }, var.default_tags, )
 }
 
 resource "aws_security_group" "windows_server" {
@@ -67,5 +67,5 @@ resource "aws_security_group" "windows_server" {
     cidr_blocks = ["0.0.0.0/0"]
   }
 
-  tags = merge({"Name" = "${var.server_name}"},var.default_tags,)
+  tags = merge({ "Name" = "${var.server_name}" }, var.default_tags, )
 }

@@ -36,10 +36,10 @@ resource "aws_eip" "ubuntu" {
 }
 resource "sdm_resource" "ubuntu" {
   ssh {
-    name          = "tf-ubuntu"
-    username      = "ubuntu"
-    hostname      = aws_eip.ubuntu.public_dns
-    port          = 22
+    name     = "tf-ubuntu"
+    username = "ubuntu"
+    hostname = aws_eip.ubuntu.public_dns
+    port     = 22
   }
   provisioner "local-exec" {
     command = "sdm admin roles grant ${sdm_resource.ubuntu.ssh.0.name} NOC && echo SUCCESS"
@@ -49,12 +49,12 @@ resource "sdm_resource" "ubuntu" {
 # Create instance 
 #################
 resource "aws_instance" "ubuntu" {
-  instance_type               = var.instance_type
-  monitoring                  = var.monitoring
-  key_name                    = var.key_name
-  ami                         = data.aws_ami.ubuntu.image_id
+  instance_type = var.instance_type
+  monitoring    = var.monitoring
+  key_name      = var.key_name
+  ami           = data.aws_ami.ubuntu.image_id
 
-  user_data                   = <<ADDSDMKEY
+  user_data = <<ADDSDMKEY
 #!/bin/bash
 echo "${sdm_resource.ubuntu.ssh.0.public_key}" >> "/home/${local.username}/.ssh/authorized_keys"
 ADDSDMKEY

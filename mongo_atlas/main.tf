@@ -64,8 +64,8 @@ resource "null_resource" "mongo" {
 }
 
 resource "mongodbatlas_database_user" "mongo" {
-  username = var.mongo_username
-  password = var.mongo_password
+  username      = var.mongo_username
+  password      = var.mongo_password
   project_id    = mongodbatlas_project.mongo.id
   database_name = "admin"
   roles {

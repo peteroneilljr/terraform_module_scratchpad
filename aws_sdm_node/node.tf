@@ -12,15 +12,15 @@ resource "sdm_node" "gateway" {
 }
 resource "sdm_node" "relay" {
   count = length(var.deploy_relay_subnet_ids)
-  
+
   relay {
-    name  = "${var.sdm_node_name}-relay-${count.index}"
+    name = "${var.sdm_node_name}-relay-${count.index}"
   }
 }
 locals {
-  node_name_list = concat(sdm_node.gateway.*.gateway.0.name, sdm_node.relay.*.relay.0.name)
+  node_name_list  = concat(sdm_node.gateway.*.gateway.0.name, sdm_node.relay.*.relay.0.name)
   node_token_list = concat(sdm_node.gateway.*.gateway.0.token, sdm_node.relay.*.relay.0.token)
-  subnet_list = concat(var.deploy_gw_subnet_ids, var.deploy_relay_subnet_ids)
+  subnet_list     = concat(var.deploy_gw_subnet_ids, var.deploy_relay_subnet_ids)
 }
 
 resource "aws_ssm_parameter" "node" {
@@ -50,7 +50,7 @@ resource "aws_network_interface" "node" {
 resource "aws_instance" "node" {
   count = length(local.node_name_list)
 
-  instance_type = var.dev_mode ? "t3.micro":"t3.medium"
+  instance_type = var.dev_mode ? "t3.micro" : "t3.medium"
   ami           = data.aws_ami.amazon_linux_2.image_id
   user_data     = <<USERDATA
 #!/bin/bash -xe
@@ -69,7 +69,7 @@ USERDATA
     device_index         = 0
   }
   lifecycle {
-    ignore_changes =[ami]
+    ignore_changes = [ami]
   }
   tags = merge({ "Name" = "${local.node_name_list[count.index]}" }, var.tags, )
 }
@@ -77,7 +77,7 @@ USERDATA
 # Security Group
 #################
 resource "aws_security_group" "gateway" {
-  count = length(var.deploy_gw_subnet_ids) > 0 ? 1:0
+  count = length(var.deploy_gw_subnet_ids) > 0 ? 1 : 0
 
   name = "${var.sdm_node_name}-gateways"
   tags = merge({ "Name" = "${var.sdm_node_name}" }, var.tags,
@@ -116,7 +116,7 @@ resource "aws_security_group" "gateway" {
   }
 }
 resource "aws_security_group" "relay" {
-  count = length(var.deploy_relay_subnet_ids) > 0 ? 1:0
+  count = length(var.deploy_relay_subnet_ids) > 0 ? 1 : 0
 
   name = "${var.sdm_node_name}-relays"
   tags = merge({ "Name" = "${var.sdm_node_name}" }, var.tags,
