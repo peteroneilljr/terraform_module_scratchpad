@@ -1,8 +1,21 @@
 #################
+# Locals
+#################
+locals {
+  gateway_count = length(var.deploy_gw_subnet_ids)
+  relay_count   = length(var.deploy_relay_subnet_ids)
+  node_count    = length(var.deploy_gw_subnet_ids) + length(var.deploy_relay_subnet_ids)
+
+  node_name_list  = concat(sdm_node.gateway.*.gateway.0.name, sdm_node.relay.*.relay.0.name)
+  node_token_list = concat(sdm_node.gateway.*.gateway.0.token, sdm_node.relay.*.relay.0.token)
+  subnet_list     = concat(var.deploy_gw_subnet_ids, var.deploy_relay_subnet_ids)
+}
+
+#################
 # Create strongDM gateway and store token
 #################
 resource "sdm_node" "gateway" {
-  count = length(var.deploy_gw_subnet_ids)
+  count = local.gateway_count
 
   gateway {
     name           = "${var.sdm_node_name}-gateway-${count.index}"
@@ -11,20 +24,15 @@ resource "sdm_node" "gateway" {
   }
 }
 resource "sdm_node" "relay" {
-  count = length(var.deploy_relay_subnet_ids)
+  count = local.relay_count
 
   relay {
     name = "${var.sdm_node_name}-relay-${count.index}"
   }
 }
-locals {
-  node_name_list  = concat(sdm_node.gateway.*.gateway.0.name, sdm_node.relay.*.relay.0.name)
-  node_token_list = concat(sdm_node.gateway.*.gateway.0.token, sdm_node.relay.*.relay.0.token)
-  subnet_list     = concat(var.deploy_gw_subnet_ids, var.deploy_relay_subnet_ids)
-}
 
 resource "aws_ssm_parameter" "node" {
-  count = length(local.node_name_list)
+  count = local.node_count
 
   name  = "/strongdm/node/${local.node_name_list[count.index]}/token"
   type  = "String"
@@ -35,20 +43,20 @@ resource "aws_ssm_parameter" "node" {
 # Instance configuration 
 #################
 resource "aws_eip" "node" {
-  count = length(var.deploy_gw_subnet_ids) + length(var.deploy_relay_subnet_ids)
+  count = local.node_count
 
   network_interface = aws_network_interface.node[count.index].id
 }
 resource "aws_network_interface" "node" {
-  count = length(var.deploy_gw_subnet_ids) + length(var.deploy_relay_subnet_ids)
+  count = local.node_count
 
   subnet_id       = local.subnet_list[count.index]
-  security_groups = [count.index <= length(var.deploy_gw_subnet_ids) ? aws_security_group.gateway[0].id : aws_security_group.relay[0].id]
+  security_groups = [count.index < local.gateway_count ? aws_security_group.gateway[0].id : aws_security_group.relay[0].id]
 
   tags = merge({ "Name" = "${var.sdm_node_name}-node-${count.index}" }, var.tags, )
 }
 resource "aws_instance" "node" {
-  count = length(local.node_name_list)
+  count = local.node_count
 
   instance_type = var.dev_mode ? "t3.micro" : "t3.medium"
   ami           = data.aws_ami.amazon_linux_2.image_id
@@ -77,7 +85,7 @@ USERDATA
 # Security Group
 #################
 resource "aws_security_group" "gateway" {
-  count = length(var.deploy_gw_subnet_ids) > 0 ? 1 : 0
+  count = local.gateway_count > 0 ? 1 : 0
 
   name = "${var.sdm_node_name}-gateways"
   tags = merge({ "Name" = "${var.sdm_node_name}" }, var.tags,
@@ -116,7 +124,7 @@ resource "aws_security_group" "gateway" {
   }
 }
 resource "aws_security_group" "relay" {
-  count = length(var.deploy_relay_subnet_ids) > 0 ? 1 : 0
+  count = local.relay_count > 0 ? 1 : 0
 
   name = "${var.sdm_node_name}-relays"
   tags = merge({ "Name" = "${var.sdm_node_name}" }, var.tags,
@@ -147,4 +155,3 @@ resource "aws_security_group" "relay" {
     create_before_destroy = true
   }
 }
-
