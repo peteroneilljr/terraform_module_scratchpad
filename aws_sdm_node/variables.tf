@@ -1,5 +1,5 @@
 variable "sdm_node_name" {
-  description = "This name is applied to resources where applicable, such as titles and tags."
+  description = "This name is applied to resources where applicable, e.g. titles and tags."
   type        = string
   default     = "strongDM"
 }
@@ -55,6 +55,16 @@ variable "detailed_monitoiring" {
 variable "disable_dns" {
   description = "Use IP address of EIP instead of DNS hostname"
   type = bool
+  default = false
+}
+variable "customer_key" {
+  description = "Specify a customer key to use for parameter store encryption."
+  type = string
+  default = null
+}
+variable "enable_cpu_alarm" {
+  description = "CloudWatch alarm: 75% cpu utilization for 10 minutes."
+  trype = bool
   default = false
 }
 

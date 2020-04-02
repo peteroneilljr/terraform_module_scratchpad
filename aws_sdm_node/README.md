@@ -2,8 +2,8 @@
 
 Things that might be cool to have
 - conditional create module
-- bool for cloudwatch alarms
-- add CMK to parameter store
+- ~~bool for cloudwatch alarms~~
+- ~~add CMK to parameter store~~
 - ~~bool for ssh access~~
 - ~~specify placement by subnet~~
 - ~~lifecycle ignore ami updating~~
@@ -15,6 +15,14 @@ Things that might be cool to have
 - ~~gateway count~~
 - ~~store token in parameter store~~
 - ~~dev mode, smaller instance size~~
+
+Documentation
+- Descriptions for all variables
+- Required AWS permissions for each option
+- README with examples
+- Full Examples in folders
+- Test suite? 
+
 
 ~~~
 module "sdm" {

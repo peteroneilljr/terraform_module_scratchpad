@@ -2,7 +2,7 @@
 # Locals
 #################
 locals {
-  create_relay   = local.relay_count > 0 ? true : false
+  create_relay   =   local.relay_count > 0 ? true : false
   create_gateway = local.gateway_count > 0 ? true : false
 
   gateway_count = length(var.deploy_gw_subnet_ids)
@@ -36,19 +36,20 @@ resource "sdm_node" "relay" {
 resource "aws_ssm_parameter" "node" {
   count = local.node_count
 
-  name  = "/strongdm/node/${local.node_name_list[count.index]}/token"
   type  = "SecureString"
   value = local.node_token_list[count.index]
-  tags  = merge({ "Name" = "${local.node_name_list[count.index]}" }, var.tags, )
+  name  = "/strongdm/node/${local.node_name_list[count.index]}/token"
 
   overwrite = true
+  key_id = var.customer_key
+
+  tags  = merge({ "Name" = "${local.node_name_list[count.index]}" }, var.tags, )
 }
 #################
 # Instance configuration 
 #################
 resource "aws_eip" "node" {
   count = local.gateway_count
-
   network_interface = aws_network_interface.node[count.index].id
 }
 resource "aws_network_interface" "node" {
