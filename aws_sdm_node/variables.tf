@@ -12,23 +12,18 @@ variable "gateway_listen_port" {
   type        = number
   default     = 5000
 }
-variable "deploy_gw_subnet_ids" {
+variable "gateway_subnet_ids" {
   description = "strongDM gateways will be deployed into subnets provided"
   type        = list(string)
   default     = []
 }
-variable "deploy_relay_subnet_ids" {
+variable "relay_subnet_ids" {
   description = "strongDM relays will be deployed into subnets provided"
   type        = list(string)
   default     = []
 }
-variable "ssh_access" {
-  description = "Enable or diseable SSH access to gateways and relays"
-  type        = bool
-  default     = false
-}
 variable "ssh_key" {
-  description = "Public key to add to instances"
+  description = "Creates EC2 instances with public key for access"
   type        = string
   default     = null
 }
@@ -49,23 +44,28 @@ variable "dev_mode" {
 }
 variable "detailed_monitoiring" {
   description = "Enable detailed monitoring all instances created"
-  type = bool
-  default = false
+  type        = bool
+  default     = false
 }
-variable "disable_dns" {
-  description = "Use IP address of EIP instead of DNS hostname"
-  type = bool
-  default = false
+variable "dns_hostnames" {
+  description = "Use IP address or DNS hostname of EIP to create strongDM gateways"
+  type        = bool
+  default     = true
 }
-variable "customer_key" {
-  description = "Specify a customer key to use for parameter store encryption."
-  type = string
-  default = null
+variable "encryption_key" {
+  description = "Specify a customer key to use for SSM parameter store encryption."
+  type        = string
+  default     = null
 }
 variable "enable_cpu_alarm" {
   description = "CloudWatch alarm: 75% cpu utilization for 10 minutes."
-  trype = bool
-  default = false
+  type        = bool
+  default     = false
+}
+variable "enable_module" {
+  description = "Optional creation for module"
+  type        = bool
+  default     = true
 }
 
 
@@ -83,4 +83,16 @@ data "aws_ami" "amazon_linux_2" {
     name   = "name"
     values = ["amzn2-ami-hvm-*-x86_64-ebs"]
   }
+}
+
+#################
+# Locals
+#################
+locals {
+  create_relay   = local.relay_count > 0 ? true : false
+  create_gateway = local.gateway_count > 0 ? true : false
+
+  gateway_count = var.enable_module ? length(var.gateway_subnet_ids) : 0
+  relay_count   = var.enable_module ? length(var.relay_subnet_ids) : 0
+  node_count    = local.gateway_count + local.relay_count
 }
