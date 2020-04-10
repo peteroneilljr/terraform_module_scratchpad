@@ -1,5 +1,6 @@
 # Amazon EKS module
 
+## sample
 ~~~
 module "eks" {
   source           = "./modules/aws_eks"

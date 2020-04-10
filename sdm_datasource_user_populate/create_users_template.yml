@@ -1,0 +1,31 @@
+---
+  - hosts: all
+    remote_user: ubuntu
+    become: true
+    # vars:
+    #   sdm_server_name: "ubuntu_ansible_15"
+    # The following link shows how to remove users created by ansible is not listed here.
+    # https://www.cogini.com/blog/managing-user-accounts-with-ansible/
+    tasks:
+      %{ for count in range(range) ~}
+
+      - name: Add the user '${first_names[count]}_${last_names[count]}' with a bash shell and sudo access
+        user:
+          name: ${first_names[count]}_${last_names[count]}
+          shell: /bin/bash
+          groups: sudo
+          append: yes
+        register: user_output
+
+      - debug:
+          var: user_output
+    
+      - name: Deploy SDM SSH Key
+        authorized_key: user=${first_names[count]}_${last_names[count]}
+                        key="${chomp(ssh_keys[count])}"
+                        state=present
+        register: authorized_keys
+
+      - debug:
+          var: authorized_keys
+      %{ endfor ~}

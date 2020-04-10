@@ -64,6 +64,9 @@ ADDSDMKEY
     device_index         = 0
   }
   tags = merge({ "Name" = "${var.server_name}" }, var.tags, )
+  lifecycle {
+    ignore_changes = [ami]
+  }
 }
 
 
