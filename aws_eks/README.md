@@ -2,24 +2,21 @@
 
 ## sample
 ~~~
-module "eks" {
-  source           = "./modules/aws_eks"
-  eks_cluster_name = "peter-cluster"
-  cluster_version  = "1.14"
-  subnets          = aws_subnet.peter_private_subnet.*.id
-  vpc_id           = aws_vpc.peter_vpc.id
-  vpc_igw          = aws_internet_gateway.peter_vpc_igw.id
-  vpc_cidr         = aws_vpc.peter_vpc.cidr_block # expects a /16
-  eks_cidr_block   = "50" # Turns into 10.17.50.0/24
+# module "eks" {
+#   source           = "./modules/aws_eks"
+#   eks_cluster_name = "peter-k8s"
+#   cluster_version  = "1.15"
+#   vpc_id           = module.vpc.vpc_id
+#   vpc_igw          = module.vpc.igw_id
+#   vpc_cidr         = module.vpc.vpc_cidr_block # Supply a /16 cidr block
+#   eks_cidr_block   = "50" # Assigns subnets x.x.50.x/24
 
-  default_tags = var.default_tags
-}
+#   default_tags = var.default_tags
+# }
 
-output "eks_context" {
-  value = module.eks.eks_kubeconfig
-}
+# output "eks_kubeconfig" {
+#   value = module.eks.kubeconfig
+#   sensitive = true
+# }
 
-output "eks_auth" {
-  value = module.eks.eks_config_map_aws_auth
-}
 ~~~

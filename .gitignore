@@ -31,3 +31,4 @@ override.tf.json
 # External Modules
 terraform-aws-vpc
 **/aws_sdm_node/*
+**/terraform_aws_eks_strongdm_gateways/*

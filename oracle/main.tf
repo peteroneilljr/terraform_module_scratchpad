@@ -55,25 +55,3 @@ resource "aws_security_group" "rds" {
   tags = var.default_tags
 }
 
-#################
-# strongDM register
-#################
-resource "sdm_resource" "oracle" {
-  count = var.create_sdm ? 1 : 0
-  oracle {
-    name          = var.db_identifier
-    hostname      = aws_db_instance.rds.address
-    database      = aws_db_instance.rds.name
-    username      = aws_db_instance.rds.username
-    password      = aws_db_instance.rds.password
-    port          = var.db_port
-    tls_required  = true
-    port_override = -1
-  }
-  lifecycle {
-    ignore_changes = [
-      oracle[0].password,
-      oracle[0].port_override
-    ]
-  }
-}

@@ -1,11 +1,6 @@
-terraform {
-  required_version = "~> 0.12.6"
 
-  required_providers {
-    aws = "~> 2.53"
-    sdm = "~> 1.0"
-  }
-}
+variable "sdm_role_ids" {}
+
 variable "vpc_id" {}
 variable "subnet_ids" {}
 variable "db_engine" {}
